@@ -1,11 +1,10 @@
-
 {
   "name": "shopper-tracker",
   "version": "1.0.0",
   "description": "",
   "main": "UserVerification.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "server.js"
   },
   "repository": {
     "type": "git",
