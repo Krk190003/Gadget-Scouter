@@ -4,7 +4,7 @@
   "description": "",
   "main": "UserVerification.js",
   "scripts": {
-    "start": "server.js"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
