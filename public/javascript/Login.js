@@ -1,5 +1,6 @@
 import { createDynamicText } from "./lib.js";
 
+
 var LoginButton = document.querySelector("#Login-Button");
 
 

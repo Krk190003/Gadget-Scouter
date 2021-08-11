@@ -1,6 +1,7 @@
 
 import { createDynamicText } from "./lib.js";
 
+
 let signupButton = document.getElementById("Register-Button");
 
 signupButton.addEventListener("click", async () => {

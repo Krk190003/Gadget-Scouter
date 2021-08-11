@@ -1,5 +1,6 @@
 function createDynamicText(text, parentSelector, selector) {
     
+    
     let failedLoginMsg = document.createElement("div");
     let failedLoginTxt;
     failedLoginTxt = document.createTextNode(text);
