@@ -22,11 +22,11 @@ const ProductScraper = require("./productScrapper");
 
 mongoose.connect(process.env.MONGODBURI, {useNewUrlParser: true, useUnifiedTopology: true }).then(result => {
     console.log("Connected to DB")
-     app.listen(process.env.PORT || 5000);
-    console.log("App Listening on  Port" + port)
+    
 
 }).catch(() => console.log("Failed to connect to DB"))
 
+app.listen(process.env.PORT || 5000);
 //Route Middleware
 
 const Mongostore = new mongodbSession({
