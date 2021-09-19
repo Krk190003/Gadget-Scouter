@@ -14,17 +14,17 @@ const ProductScraper = require("./productScrapper");
 
 
 
-
+// heroku config:set MONGODB_URI='mongodb+srv://Kokil:Appar1212@shopper-tracker.w3qt4.mongodb.net/Shopper-Tracker?retryWrites=true&w=majority'
 
 
 //Connect to Database 
 
 
-mongoose.connect(process.env.MONGODBURI, {useNewUrlParser: true, useUnifiedTopology: true }).then(result => {
+mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology: true }).then(result => {
     console.log("Connected to DB")
     
 
-}).catch(() => console.log("Failed to connect to DB"))
+}).catch((e) => console.log(e))
 
 app.listen(process.env.PORT || 5000);
 //Route Middleware
