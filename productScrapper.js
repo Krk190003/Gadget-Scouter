@@ -9,6 +9,10 @@ const puppeteer = require('puppeteer');
 const mongoose = require('mongoose');
 const mongoose_config = {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false };
 const Item = require("./models/item.js");
+const proxyChain = require('proxy-chain');
+
+
+
 let PageTest;
 
 
@@ -29,7 +33,9 @@ let browser;
 
 
 const launchBrowser = async () => {
-    
+    const oldProxyUrl = process.env.PROXY_SERVER;
+const newProxyUrl = await proxyChain.anonymizeProxy(oldProxyUrl);
+console.log("It is " + newProxyUrl)
  browser = await puppeteer.launch({
         headless:true,
         defaultViewport: null,
@@ -38,6 +44,7 @@ const launchBrowser = async () => {
             "--no-sandbox",
             "--single-process",
             "--no-zygote"
+            `--proxy-server=${newProxyUrl}`
         ],
         
     });
@@ -130,7 +137,7 @@ const test = async () => {
     const page = await launchBrowser();
     page.setJavaScriptEnabled(false)
     page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36");
-    await page.goto("https://www.newegg.com/apple-ipad-pro-gray/p/24W-0002-00MN4?Description=Ipad%20Pro&cm_re=Ipad_Pro-_-24W-0002-00MN4-_-Product&quicklink=true")
+    await page.goto("https://www.google.com/")
     let pagehtml = await page.evaluate(() => {
         const price = document.querySelector('html');
         return price.innerHTML;
