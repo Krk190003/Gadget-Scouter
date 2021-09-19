@@ -1,6 +1,4 @@
 import { createDynamicText } from "./lib.js";
-
-
 let signupButton = document.getElementById("Register-Button");
 
 signupButton.addEventListener("click", async () => {
@@ -23,9 +21,9 @@ signupButton.addEventListener("click", async () => {
 
 
         //Checks to see if the Username is already taken 
-       
-       
-       
+
+
+
         //Registers Users to the Database
         let result = await fetch("/Sign-In", {
             method: "POST",
@@ -42,7 +40,7 @@ signupButton.addEventListener("click", async () => {
         })
         result = await result.json();
 
-        if(result.status == 409){
+        if (result.status == 409) {
             loadIcon.setAttribute("class", null);
             document.getElementById("Register-Button").appendChild(buttonText);
             if (document.getElementById("ErrMessage") == null) {
@@ -84,7 +82,7 @@ signupButton.addEventListener("click", async () => {
             })
 
             result = await result.json();
-            
+
             if (result.status != 200) {
                 loadIcon.setAttribute("class", null);
                 document.getElementById("Register-Button").appendChild(buttonText);

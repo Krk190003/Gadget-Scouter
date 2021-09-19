@@ -9,7 +9,6 @@ body {
 	width: 100vw;
 	min-height: 500px;
 }
-
 .background {
 	display: grid;
 	grid-template: repeat(1, 1fr)/ 5fr 3fr;

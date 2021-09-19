@@ -80,7 +80,7 @@ LoginButton.addEventListener("click", async () => {
 
 
 
-export {createDynamicText};
+export { createDynamicText };
 
 
 

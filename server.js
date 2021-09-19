@@ -1,26 +1,29 @@
-
-const { Mongoose } = require("mongoose");
+require("dotenv").config();
 const express= require("express"); 
 const app = express();
-const dbURI = "mongodb+srv://Main-User:Appar1212@shopper-tracker.w3qt4.mongodb.net/Shopper-Tracker?retryWrites=true&w=majority";
+const dbURI = process.env.MONGODBURI;
 const mongoose = require("mongoose");
 const User = require('./models/user')
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const session = require("express-session"); 
 const mongodbSession = require("connect-mongodb-session")(session);
-const cors = require('cors'); 
+const cors = require("cors"); 
+const Item = require("./models/item.js");
+const ProductScraper = require("./productScrapper");
 
 
 
-const port = process.env.PORT || 5000;
+const port = 5000;
 
 
 //Connect to Database 
 
-mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology: true }).then(result => {
+
+mongoose.connect(process.env.MONGODBURI, {useNewUrlParser: true, useUnifiedTopology: true }).then(result => {
     console.log("Connected to DB")
-    app.listen(port);
+     app.listen(port);
+    console.log("App Listening on  Port" + port)
+
 }).catch(() => console.log("Failed to connect to DB"))
 
 //Route Middleware
@@ -57,10 +60,11 @@ app.use(session({
     resave: false,
     saveUninitialized: false, 
     store: Mongostore,
+    unset:"destroy",
     cookie: {
         secure:false,
         maxAge: 1000*60*10,
-        httpOnly: false,
+        httpOnly: true,
 
 
     },
@@ -71,9 +75,6 @@ app.use(session({
 
 
 
-//Dedicated Middleware 
-
-
 
 
 
@@ -81,18 +82,6 @@ app.use(session({
 
 app.get("/", (req, res) => {
     res.redirect("/login");
-})
-
-//Login Routes 
-app.get("/login", (req, res) => {
-    res.sendFile(__dirname + "/views/LoginPage.html");  
-
-
-})
-
-app.get("/Home", isAuth, (req, res) => {
-    res.sendFile(__dirname +  "/views/HomePage.html");
-    
 })
 
 
@@ -131,12 +120,11 @@ app.post("/login", async (req, res) => {
 })
 
 
-app.delete("/logout", (req, res) => {
-    req.session.destroy((err) => {
-        if(err) throw err; 
-        console.log("Delete was called");
-        res.end();
-    })
+app.delete("/logout", async (req, res) => {
+    req.session.destroy() 
+    res.end();
+
+   
 })
 
 
@@ -195,3 +183,61 @@ app.get("/Authorize",  (req, res) => {
         res.send(false);
     }
 })
+
+// Search-Route 
+
+app.get("/product", async (req, res) => {
+    let name = req.query.name; 
+
+    let product; 
+
+       product = await Item.findOne({ProductName: `${name}`}, (err) => {if(err) {console.log(err)}}); 
+       
+       res.json(product)
+
+   
+
+ 
+    
+
+})
+
+app.get("/search", async (req, res) => {
+    let term = req.query.term; 
+    let filteredDataList; 
+  
+
+    if(term == "undefined"){
+        console.log("fasfdsf")
+        filteredDataList = await Item.find({}, (err) => {if(err) {console.log(err)}}); 
+    }
+    else{
+          const regex = new RegExp(`${term}`, "i")
+        filteredDataList = await Item.find({"ProductName": regex}, (err) => {if(err) {console.log(err)}}); 
+    }
+    res.json(filteredDataList)
+}
+    
+       
+)      
+
+   
+app.get("/test", async (req, res)=> {
+    let t = await ProductScraper.test();
+   res.send(t);
+
+    // res.send(ProductScraper.PageTest);
+})
+
+ 
+    
+
+
+//Commands Run on Server Startup 
+
+
+
+// ProductScraper.runScraper().then(()=> {
+//     console.log("Done");
+// })
+
