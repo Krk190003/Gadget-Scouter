@@ -1,7 +1,8 @@
 require("dotenv").config();
 const express= require("express"); 
 const app = express();
-const dbURI = process.env.MONGODBURI;
+// const dbURI = process.env.MONGODBURI;
+const dbURI = "mongodb+srv://Main-User:Appar1212@shopper-tracker.w3qt4.mongodb.net/Shopper-Tracker?retryWrites=true&w=majority" 
 const mongoose = require("mongoose");
 const User = require('./models/user')
 const bcrypt = require("bcrypt");
