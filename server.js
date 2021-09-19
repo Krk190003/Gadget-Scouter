@@ -225,7 +225,7 @@ app.get("/search", async (req, res) => {
    
 app.get("/test", async (req, res)=> {
     let t = await ProductScraper.test();
-   res.send(t);
+    res.send(t);
 
     // res.send(ProductScraper.PageTest);
 })
