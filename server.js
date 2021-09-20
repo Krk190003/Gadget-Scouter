@@ -1,8 +1,7 @@
 require("dotenv").config();
 const express= require("express"); 
 const app = express();
-// const dbURI = process.env.MONGODBURI;
-const dbURI = "mongodb+srv://Main-User:Appar1212@shopper-tracker.w3qt4.mongodb.net/Shopper-Tracker?retryWrites=true&w=majority" 
+const dbURI = process.env.MONGODBURI;
 const mongoose = require("mongoose");
 const User = require('./models/user')
 const bcrypt = require("bcrypt");
@@ -11,14 +10,14 @@ const mongodbSession = require("connect-mongodb-session")(session);
 const cors = require("cors"); 
 const Item = require("./models/item.js");
 const ProductScraper = require("./productScrapper");
+const path = require("path");
 
 
 
-// heroku config:set MONGODB_URI='mongodb+srv://Kokil:Appar1212@shopper-tracker.w3qt4.mongodb.net/Shopper-Tracker?retryWrites=true&w=majority'
+
 
 
 //Connect to Database 
-
 
 mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology: true }).then(result => {
     console.log("Connected to DB")
@@ -49,13 +48,14 @@ const isAuth = (req, res, next) => {
 
 
 //Global Middleware 
+app.use(express.static(path.join(__dirname, "./build")));
 app.use(cors({
     origin:"http://localhost:3000",
     credentials: true,
 }))
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/build"));
 app.use(session({
     secret: "randomKey",
     resave: false,
@@ -79,12 +79,9 @@ app.use(session({
 
 
 
+
+
 //Base routes
-
-app.get("/", (req, res) => {
-    res.redirect("/login");
-})
-
 
 
 
@@ -209,7 +206,6 @@ app.get("/search", async (req, res) => {
   
 
     if(term == "undefined"){
-        console.log("fasfdsf")
         filteredDataList = await Item.find({}, (err) => {if(err) {console.log(err)}}); 
     }
     else{
@@ -222,23 +218,23 @@ app.get("/search", async (req, res) => {
        
 )      
 
-   
-app.get("/test", async (req, res)=> {
-    let t = await ProductScraper.test();
-    res.send(t);
+app.use((req, res, next) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  });
 
-    // res.send(ProductScraper.PageTest);
-})
+   
 
  
     
 
 
-//Commands Run on Server Startup 
 
 
-
-// ProductScraper.runScraper().then(()=> {
-//     console.log("Done");
-// })
+//Checks Prices Every 5 Minutes
+setInterval(()=> {
+    ProductScraper.runScraper().then(()=> {
+        console.log("Done");
+    })
+    
+}, 1000*60*5)
 

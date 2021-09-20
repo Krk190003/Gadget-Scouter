@@ -25,7 +25,7 @@
     "express-session": "^1.17.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.8",
-    "proxy-chain": "^1.0.4",
+    "path": "^0.12.7",
     "puppeteer": "^10.2.0"
   },
   "devDependencies": {
